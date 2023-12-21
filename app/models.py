@@ -21,7 +21,7 @@ class CustomerAccount(models.Model):
     account = models.ForeignKey(Account, on_delete =models.PROTECT)
 
     def __str__(self):
-        return f"{self.name} - {self.id}"
+        return f"{self.name} - ID: {self.id}"
 
 class Invoice(models.Model):
     invoiceDate = models.DateTimeField(auto_now_add=True)
@@ -30,7 +30,7 @@ class Invoice(models.Model):
     account = models.ForeignKey(Account, on_delete =models.PROTECT)
 
     def __str__(self):
-        return f"{self.id} - {self.dueDate}"
+        return f"ID: {self.id} - {self.dueDate}"
     
 class Vat(models.Model):
     code = models.CharField(max_length = 50, default="M24")

@@ -17,9 +17,25 @@
     </section>
     
      <!--------------Customerlist-------------->
-     <section id="customerList">
-        
+<section id="customerList">
+    {% for c in customers %}
+<div class="card" style="width: 50rem;">
+    <div class="card-body">
+        <h4 class="card-title">{{c.name}}</h4>
+        <p class="card-text">phone: {{c.phone}} </p>
+        <p class="card-text">email: {{c.mail}} </p>
+        <p class="card-text">Vat: {{c.vat}} </p>
+
+        <!-- <a href="/edit-supplier-get/{{s.id}}/" class="btn btn-primary">Edit</a>
+        <a href="/confirm-delete-supplier/{{s.id}}/" class="btn btn-danger">Delete</a>
+        <a href="/products-by-supplier/{{s.id}}/" class="btn btn-secondary">{{s.companyname}} Products</a> -->
+    </div>
+</div>
+
+
+{%endfor%}
     
-    </section>
+    
+</section>
 
 {% endblock %}
