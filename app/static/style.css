@@ -1,0 +1,64 @@
+body{
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+    height: 150vh;
+}
+#home{
+    width: 100%;
+    height: 60vh;
+    background-color: rgb(195, 208, 204);
+    text-align: center;
+    justify-content: center;
+    display: flex;
+}
+.home-text{
+    position: absolute;
+    width: 50%;
+    padding: 20px;
+    margin: 20px;
+}
+h1{
+    color: rgb(94, 97, 121);
+}
+p{
+ letter-spacing: 1.5px;
+}
+h6{
+    text-transform: uppercase;
+    padding-bottom: 10px;
+}
+#addnew{
+    width: 100%;
+    height: 80vh;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    padding: 35px 5% 0px 5%;
+    background-color: #777667;
+    background-image: url("images/Mask\ group.jpg");
+    background-repeat: no-repeat;
+    background-size: 650px;
+    background-position: right;
+    position: relative;
+    background-repeat: no-repeat;
+    z-index: 1;
+   
+}
+.btn{
+    width: 200px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ae2d2d;
+    border-radius: 5px;
+    color:#b93333;
+    margin: 10px;
+}
+.btn:hover{
+    background-color: #dad1d1;
+    transition: all ease 0.5s;
+    
+}
