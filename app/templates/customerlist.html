@@ -9,33 +9,38 @@
     <h1>All Customers</h1>
     <p>List of all Customer Accounts. <br>
         Choose one to see more details of a specific customer.</p>
-<center>
+    <center>
         <a class="btn" href="/add-customer">Add</a>
+       
+        
     </center>
     </div>
     
     </section>
     
      <!--------------Customerlist-------------->
-<section id="customerList">
+
     {% for c in customers %}
-<div class="card" style="width: 50rem;">
+    <div class="customerList">
+    <div class="card" style="width: 100%;">
     <div class="card-body">
-        <h4 class="card-title">{{c.name}}</h4>
+        <h4 class="card-title">{{c.name}} {{c.id}}</h4>
         <p class="card-text">phone: {{c.phone}} </p>
         <p class="card-text">email: {{c.mail}} </p>
         <p class="card-text">Vat: {{c.vat}} </p>
 
-        <!-- <a href="/edit-supplier-get/{{s.id}}/" class="btn btn-primary">Edit</a>
-        <a href="/confirm-delete-supplier/{{s.id}}/" class="btn btn-danger">Delete</a>
-        <a href="/products-by-supplier/{{s.id}}/" class="btn btn-secondary">{{s.companyname}} Products</a> -->
+        <a href="/edit-customer-get/{{c.id}}/"class="btn" >Edit</a>
+        <a href="/confirm-delete-customer/{{c.id}}/" class="btn" >Delete</a>
+        <a href="/bills-by-customer/{{c.id}}/" class="btn-ghost" >{{c.name}} Bills</a>
+        
     </div>
 </div>
-
+</div>
 
 {%endfor%}
-    
-    
-</section>
+
+
+
+
 
 {% endblock %}

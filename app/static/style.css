@@ -46,19 +46,4 @@ h6{
     z-index: 1;
    
 }
-.btn{
-    width: 200px;
-    height: 45px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ae2d2d;
-    border-radius: 5px;
-    color:#b93333;
-    margin: 10px;
-}
-.btn:hover{
-    background-color: #dad1d1;
-    transition: all ease 0.5s;
-    
-}
+

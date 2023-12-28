@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div class="card" style="width: 25rem;">
+    <div class="card-header">
+
+        <h5>Editing {{customer.name}} by {{customer.account.name}}</h5>
+
+        <div class="card-body">
+            <form method="post" action="/edit-customer-post/{{customer.id}}/">
+
+                {%csrf_token %}
+                <div class="form-group">
+                    <label>name</label>
+                    <input type="text" name="name" value={{customer.name}}>
+                </div>
+                <div class="form-group">
+                    <label>address</label>
+                    <input type="text" name="address" value={{customer.address}}>
+                </div>
+                <input type="submit" value="Update" class="btn btn-success btn-sm">
+                <input type="button" onclick="window.location.href='/customers'" id="hide-btn"
+                    class="btn btn-secondary btn-sm" value="Cancel">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

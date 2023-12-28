@@ -6,19 +6,37 @@
 <section id="main">
     <div class="main-text">
     <h6>Project Billingsystem</h6>
-    <h1>All Invoices</h1>
-    <p>List of Bills. </p>
-<center>
+    <h1>All Bills</h1>
+    <p>List of all Bills.</p>
+    <center>
         <a class="btn" href="/add-invoice">Add</a>
+       
+        
     </center>
     </div>
     
     </section>
     
-     <!--------------Customerlist-------------->
-     <section id="customerList">
+     <!--------------Invoicelist-------------->
+
+    {% for i in invoices %}
+    <div class="customerList">
+    <div class="card" style="width: 100%;">
+    <div class="card-body">
+        <h4 class="card-title">Invoice ID: {{i.id}}</h4>
+        <h4 class="card-title">Customer: {{i.customerAccount.name}}</h4>
+        <p class="card-text">Invoice date: {{i.invoiceDate}} </p>
+        <p class="card-text">Due date: {{i.dueDate}} </p>
+        <p class="card-text">Created by: {{i.account.name}} </p>
+
+        <a href="/edit-invoice-get/{{c.id}}/"class="btn" >Edit</a>
+        <a href="/bills-by-customer/{{i.id}}/" class="btn-ghost" >{{i.id}} Bills</a>
         
-    
-    </section>
+    </div>
+</div>
+</div>
+
+{%endfor%}
 
 {% endblock %}
+

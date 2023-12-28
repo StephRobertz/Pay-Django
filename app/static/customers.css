@@ -46,24 +46,22 @@ h6{
     z-index: 1;
    
 }
-#customerList{
+/* .customerList{
     width: 100%;
     height: 80vh;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
+    justify-content: space-between;
     padding: 35px 5% 0px 5%;
     background-color: #777667;
- 
     background-repeat: no-repeat;
     background-size: 650px;
     background-position: right;
     position: relative;
-    background-repeat: no-repeat;
-    z-index: -1;
    
-}
+   
+} */
 .btn{
     width: 200px;
     height: 45px;
@@ -75,6 +73,9 @@ h6{
     color:#e7e0e0;
     margin: 10px;
     z-index: 5;
+    cursor: pointer;
+    
+    
 }
 .btn-ghost{
     width: 200px;
@@ -85,12 +86,13 @@ h6{
     background-color: #c0babaaf;
     opacity: 0.8;
     border-radius: 5px;
-    color:#e7e0e0;
+    color:#242222;
     margin: 10px;
     z-index: 5;
+    cursor: pointer;
 }
 .btn:hover, .btn-ghost:hover{
     background-color: #c8d1cdb5;
     transition: all ease 0.5s;
-    
+    z-index: 5;
 }
