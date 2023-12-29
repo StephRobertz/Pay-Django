@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomerAccount, Account, Invoice, InvoiceRows
+from .models import CustomerAccount, Account, Invoice, InvoiceRows, Vat
 from django.forms import modelformset_factory
 
 
@@ -17,10 +17,16 @@ class InvoiceForm(forms.ModelForm):
         exclude = ['invoiceDate','dueDate']
         fields = ('__all__')
 
+class VatForm(forms.ModelForm):
+    class Meta:
+        model = Vat
+        exclude = ['code','description']
+        fields = ('__all__')
+
 class InvoiceRowForm(forms.ModelForm):
     class Meta:
         model = InvoiceRows
-        fields = ['title', 'price', 'quantity']
+        fields = ['title', 'price', 'quantity', 'vat']
 
 class InvoiceRowFormSet(forms.models.BaseModelFormSet):
     def clean(self):
@@ -31,9 +37,11 @@ class InvoiceRowFormSet(forms.models.BaseModelFormSet):
             if form.cleaned_data.get('quantity') and form.cleaned_data.get('price'):
                 quantity = form.cleaned_data['quantity']
                 price = form.cleaned_data['price']
-                total += quantity * price
+                percent = form.cleaned_data['vat'].percent if 'vat' in form.cleaned_data else 0
+                
+                total += quantity * price * percent
 
-        # Assuming you have a field named 'total' in your Invoice model
+        
         self.forms[0].instance.total = total
 
 

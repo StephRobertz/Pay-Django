@@ -77,6 +77,9 @@ def edit_customer_post(request, id):
         item.save()
         return redirect(customerlistview)
 
+
+
+
 #INVOICE VIEWS
  
 
@@ -88,6 +91,11 @@ def invoicelistview(request):
     accountlist = Account.objects.all()
     context = {'invoices': invoicelist,'invoicerow': invoicerowlist, 'customers': customerlist, 'accounts': accountlist}
     return render (request,"invoicelist.html",context)
+
+def invoicerowlistview(request):
+    invoicerowlist = InvoiceRows.objects.all()
+    context = {'invoicerow': invoicerowlist}
+    return render (request,"invoicerowlist.html",context)
 
 
 def addInvoice(request):

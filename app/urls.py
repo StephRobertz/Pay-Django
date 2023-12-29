@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import landingview, customerlistview, addCustomer, invoicelistview, addInvoice, accountlistview
-from .views import deletecustomer, confirmdeletecustomer, edit_customer_get, edit_customer_post
+from .views import deletecustomer, confirmdeletecustomer, edit_customer_get, edit_customer_post,  invoicerowlistview
 
 urlpatterns = [
     path('', landingview),
@@ -17,6 +17,7 @@ urlpatterns = [
 
 
     # Invoice url's
-    path('invoicelist/', invoicelistview),
+    path('invoicelist/', invoicelistview, name='invoicelist'),
+    path('invoicerowlist/', invoicerowlistview, name='invoicerowlist'),
     path('add-invoice/', addInvoice, name="add-invoice"),
 ]
