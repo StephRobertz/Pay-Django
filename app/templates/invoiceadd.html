@@ -1,4 +1,3 @@
-
 {% extends 'index.html' %}
 
 
@@ -14,9 +13,9 @@
        
     </div>
     </div>
-
+    
 </section>
-<form method="post" action="{% url 'add-invoice' %}">
+<!-- <form method="post" action="{% url 'add-invoice' %}">
     {% csrf_token %}
     {{ form.as_p }}
 
@@ -26,5 +25,23 @@
     {% endfor %}
 
     <button type="submit">Create Invoice</button>
+</form> -->
+
+<form method="post" action="{% url 'add-invoice' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div id="formset-container">
+        {{ formset.management_form }}
+        {% for form in formset %}
+            {{ form.as_table }}
+        {% endfor %}
+    </div>
+
+    <button type="submit">Create Invoice</button>
+    <button type="button" id="add-row-button">Add Row</button>
 </form>
 {% endblock %}
+
+
+

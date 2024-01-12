@@ -28,21 +28,16 @@
         <h4 class="card-title">Customer: {{i.customerAccount.name}}</h4>
         <p class="card-text">Invoice date: {{i.invoiceDate}} </p>
         <p class="card-text">Due date: {{i.dueDate}} </p>
-        <p class="card-title">Title: {{i.invoicerows.title}}</p>
         <p class="card-text">Created by: {{i.account.name}} </p>
-        <p class="card-text">Banknumber: {{i.account.bankAccountNr}} </p>
+        
        
        
-    <!-- Iterate over related invoice rows -->
-    {% for ir in invoiceRows %}
-        <p class="card-title">Title: {{ ir.title }}</p>
-        <!-- Add other properties of InvoiceRows as needed -->
-    {% endfor %}
 
 
 
-        <a href="/edit-invoice-get/{{c.id}}/"class="btn" >Edit</a>
-        <a href="/bills-by-customer/{{i.id}}/" class="btn-ghost" >{{i.id}} Bills</a>
+
+        <a href="/edit-invoice-get/{{i.id}}/"class="btn" >Edit</a>
+      
         
     </div>
 </div>

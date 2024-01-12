@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<h1>Invoice delete</h1>
+
+<div class="card" style="width: 50rem;">
+    <div class="card-body">
+        <h3 class="card-title">Confirm removal of invoice</h3>
+        <h5 class="card-text">invoice ID: {{invoice.id}}</h5>
+        
+        <a href="/invoicelist/" class="btn btn-primary">Back</a>
+
+        <a href="/delete-invoice/{{invoice.id}}/" class="btn btn-danger">Delete</a>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -25,16 +25,19 @@
     <div class="card" style="width: 100%;">
     <div class="card-body">
         <h4 class="card-title">Invoice ID: {{ir.invoice.customerAccount.id}} </h4>
+        <h4 class="card-title">Customer: {{ir.invoice.customerAccount.name}}</h4>
+        <p class="card-text">Invoice date: {{ir.invoice.invoiceDate}} </p>
+        <p class="card-text">Due date: {{ir.invoice.dueDate}} </p>
+        <p class="card-text">Created by: {{ir.invoice.account.name}} </p>
         <h4 class="card-title">Title: {{ir.title}}</h4>
         <p class="card-text">Price: {{ir.price}} </p>
         <p class="card-text">Quantity: {{ir.quantity}} </p>
-        <p class="card-text">Vat: {{ir.vat.percent}} </p>
-        <p class="card-text">Total: {{ir.total}} </p>
+        <p class="card-text">{{ir.vat.description}} </p>
+        <p class="card-text"> Total: {{ ir.total }} </p>
 
 
-        <a href="/edit-invoice-get/{{c.id}}/"class="btn" >Edit</a>
-        <a href="/bills-by-customer/{{i.id}}/" class="btn-ghost" >{{i.id}} Bills</a>
-        
+        <a href="/edit-invoice-get/{{ir.invoice.id}}/"class="btn" >Edit</a>
+        <a href="/confirm-delete-invoice/{{ir.invoice.id}}/" class="btn" >Delete</a>
     </div>
 </div>
 </div>

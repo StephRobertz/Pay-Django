@@ -14,12 +14,34 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script> -->
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var addRowButton = document.getElementById("add-row-button");
+        var formsetContainer = document.getElementById("formset-container");
 
-{%load static%}
+        addRowButton.addEventListener("click", function() {
+            // Clone the last form in the formset and append it to the container
+            var lastForm = formsetContainer.lastElementChild;
+            var clonedForm = lastForm.cloneNode(true);
+
+            // Reset form values to avoid issues with form submission
+            clonedForm.querySelectorAll('input, select, textarea').forEach(function(input) {
+                input.value = '';
+            });
+
+            formsetContainer.appendChild(clonedForm);
+        });
+    });
+</script>
+
+{% load static %}
 <link rel="stylesheet" href="{% static '/style.css' %}">
 <link rel="stylesheet" href="{% static '/customers.css' %}" >
+<link rel="stylesheet" href="{% static '/form.css' %}" >
 
 
 </head>
@@ -30,7 +52,7 @@
             <a class="btn" href="/">Home</a>
             <a class="btn" href="/customerlist">Customers</a>
             <a class="btn" href="/invoicelist">Bills</a>
-            <a class="btn" href="/invoicerowlist">Bills</a>
+            <!-- <a class="btn" href="/invoicerowlist">Bills</a> -->
             <a class="btn" href="/admin">Admin pages</a>
             <a class="btn-ghost">Logout</a>
         </div>
