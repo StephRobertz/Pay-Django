@@ -1,0 +1,119 @@
+{% extends 'index.html' %}
+{%load static%}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+     <!--------------Invoice preview-------------->
+
+    <title>Invoice</title>
+    <style type="text/css">
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .invoice {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+        }
+        .invoice-details {
+            margin-top: 20px;
+        }
+        .invoice-items {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .total {
+            margin-top: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+    {% for ir in invoicerow %}
+    <div class="invoice">
+        <div class="header">
+            <h1>Invoice</h1>
+            <p>Invoice Date: {{ invoice.date }}</p>
+            <p>Customer: {{ invoice.customer }}</p>
+        </div>
+        <div class="invoice-details">
+            <h2>Invoice Details</h2>
+            <p>Invoice ID: {{ ir.invoice.id }}</p>
+            <p>Account: {{ ir.invoice.account.name }}</p>
+            <p>Banknumber: {{ ir.invoice.account.bankAccountNr }}</p>
+            <p>Due Date: {{ ir.invoice.dueDate }}</p>
+            <!-- Add more details as needed -->
+        </div>
+        <div class="invoice-items">
+            <h2>Invoice Items</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in invoice.items %}
+                        <tr>
+                            <td>{{ item.description }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.unit_price }}</td>
+                            <td>{{ item.total }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="total">
+            <h2>Total: ${{ invoice.total }}</h2>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
+    
+{% if invoicerow %}
+    {% for ir in invoicerow %}
+        <!-- Your existing template content here -->
+        <a href="{% url 'generate_pdf' id=ir.invoice.id %}" class="btn">pdf</a>
+    {% endfor %}
+{% else %}
+    <p>No invoicerow data available</p>
+{% endif %}
+
+
+
+
+{% endblock %}

@@ -1,10 +1,23 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, path
 from .models import CustomerAccount, Invoice, InvoiceRows, Account
 from .forms import CustomerForm, InvoiceForm, InvoiceRowFormSet, InvoiceRowForm
-from django.shortcuts import get_object_or_404
-from decimal import Decimal
-from django.http import HttpResponseNotFound
+
+# from django.template.loader import get_template
+
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse
+# from django.template.loader import get_template
+# from reportlab.lib.pagesizes import letter
+# from reportlab.lib import colors
+# from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+# from reportlab.lib.styles import getSampleStyleSheet
+# from io import BytesIO
+from django.db.models import Sum
+# from xhtml2pdf import pisa  # Import the xhtml2pdf library
+from django.views.generic import View
+from .process import html_to_pdf
+from django.views import View
 
 
 def landingview(request):
@@ -268,3 +281,77 @@ def confirmdeleteinvoice(request, id):
 def deleteinvoice(request, id):
     Invoice.objects.get(id = id).delete()
     return redirect(invoicelistview)
+
+
+
+#PDF preview
+
+def preview_invoice(request, id):
+    try:
+        # Get the invoice data from the database
+        invoice_instance = get_object_or_404(Invoice, id=id)
+        invoice_rows = InvoiceRows.objects.filter(invoice=invoice_instance)
+
+        # Calculate total using aggregation
+        total = invoice_rows.aggregate(Sum('total'))['total__sum']
+
+        # Your data for the invoice
+        invoice_data = {
+            'invoice_id': invoice_instance.id,
+            'date': invoice_instance.invoiceDate,
+            'customer': invoice_instance.customerAccount.name,
+            'items': [
+                {'description': ir.title, 'quantity': ir.quantity, 'unit_price': ir.price, 'total': ir.total}
+                for ir in invoice_rows
+            ],
+             'total': total,
+        }
+
+        # Fetch other related data for preview, if needed
+        # invoicerowlist = InvoiceRows.objects.all()
+        invoicelist = Invoice.objects.all()
+
+        context = {
+            'invoice': invoice_data,
+            'invoicerow': invoice_rows,
+            'invoices': invoicelist,
+        }
+
+        return render(request, 'invoice_preview.html', context)
+    
+    except Exception as e:
+         # Print the exception traceback to the console for debugging
+        import traceback
+        traceback.print_exc()
+        
+        # Return an HttpResponse with an error message or redirect to an error page
+        return HttpResponse("An error occurred while processing the request.", status=500)
+
+
+#PDF generator
+#Creating a class based view
+class GeneratePdf(View):
+    def get(self, request, id):
+        # Get the invoice data from the database
+        invoice_instance = get_object_or_404(Invoice, id=id)
+        invoice_rows = InvoiceRows.objects.filter(invoice=invoice_instance)
+
+        # Calculate total using aggregation
+        total = invoice_rows.aggregate(Sum('total'))['total__sum']
+
+        # Your data for the invoice
+        invoice_data = {
+            'invoice_id': invoice_instance.id,
+            'date': invoice_instance.invoiceDate,
+            'customer': invoice_instance.customerAccount.name,
+            'items': [
+                {'description': ir.title, 'quantity': ir.quantity, 'unit_price': ir.price, 'total': ir.total}
+                for ir in invoice_rows
+            ],
+            'total': total,
+        }
+
+        context = {'invoice': invoice_data, 'invoicerow': invoice_rows}
+        pdf = html_to_pdf('invoice_template.html', context)
+
+        return HttpResponse(pdf, content_type='application/pdf')
