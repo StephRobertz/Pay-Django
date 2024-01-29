@@ -15,13 +15,13 @@ class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
         exclude = ['invoiceDate','dueDate']
-        fields = ('__all__')
+        #fields = ('__all__')
 
 class VatForm(forms.ModelForm):
     class Meta:
         model = Vat
         exclude = ['code','description']
-        fields = ('__all__')
+        #fields = ('__all__')
 
 class InvoiceRowForm(forms.ModelForm):
    class Meta:
@@ -33,12 +33,22 @@ class InvoiceRowForm(forms.ModelForm):
             'quantity': 'Quantity',
             'vat': 'Vat',
         }
+        def __init__(self, *args, **kwargs):
+             super().__init__(*args, **kwargs)
+            # Example: Make quantity field required
+            #self.fields['quantity'].required = True
+
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Enter title'}),
-            'price': forms.NumberInput(attrs={'placeholder': 'Enter price'}),
-            'quantity': forms.NumberInput(attrs={'placeholder': 'Enter quantity'}),
-            
+            'price': forms.TextInput(attrs={'placeholder': 'Enter price', 'type': 'number'}),
+            'quantity': forms.TextInput(attrs={'placeholder': 'Enter quantity', 'type': 'number'}),
         }
+        # widgets = {
+        #     'title': forms.TextInput(attrs={'placeholder': 'Enter title'}),
+        #     'price': forms.NumberInput(attrs={'placeholder': 'Enter price'}),
+        #     'quantity': forms.NumberInput(attrs={'placeholder': 'Enter quantity'}),
+            
+        # }
 
 InvoiceRowFormSet = forms.modelformset_factory(InvoiceRows, form=InvoiceRowForm, extra=1, can_delete=True)
 

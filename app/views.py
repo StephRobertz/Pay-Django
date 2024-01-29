@@ -3,22 +3,13 @@ from django.urls import reverse, path
 from .models import CustomerAccount, Invoice, InvoiceRows, Account
 from .forms import CustomerForm, InvoiceForm, InvoiceRowFormSet, InvoiceRowForm
 
-# from django.template.loader import get_template
-
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
-# from django.template.loader import get_template
-# from reportlab.lib.pagesizes import letter
-# from reportlab.lib import colors
-# from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
-# from reportlab.lib.styles import getSampleStyleSheet
-# from io import BytesIO
 from django.db.models import Sum
-# from xhtml2pdf import pisa  # Import the xhtml2pdf library
 from django.views.generic import View
 from .process import html_to_pdf
 from django.views import View
-
+from django.forms import modelformset_factory
 
 def landingview(request):
     return render(request, 'landingpage.html')
@@ -138,71 +129,15 @@ def invoicerowlistview(request):
 
 
 #edit
-
-# def edit_invoice(request, id):
-#     # Retrieve the invoice
-#     invoice = get_object_or_404(Invoice, id=id)
-    
-#     # Fetch existing rows related to the invoice
-#     invoicerows = InvoiceRows.objects.filter(invoice=invoice)
-
-#     # Handle the formset
-#     if request.method == 'POST':
-#         formset = InvoiceRowFormSet(request.POST, queryset=invoicerows)
-#         if formset.is_valid():
-#             # Save the formset
-#             formset.save()
-#             return redirect('invoicerows', id=id)
-#     else:
-#         # Create formset with existing rows
-#         formset = InvoiceRowFormSet(queryset=invoicerows)
-
-#     return render(request, 'invoiceedit.html', {'formset': formset, 'invoice': invoice})
-
-# def edit_invoice_get(request, id):
-#     invoice = get_object_or_404(Invoice, id=id)
-#     invoicerows = InvoiceRows.objects.filter(invoice=invoice)
-#     context = {'invoice': invoice, 'invoicerows': invoicerows}
-#     return render(request, "invoiceedit.html", context)
-
-# def edit_invoice_post(request, id):
-#     invoice = get_object_or_404(Invoice, id=id)
-
-#     if request.method == 'POST':
-#         form = InvoiceRowForm(request.POST)
-#         if form.is_valid():
-#             invoicerow = form.save(commit=False)
-#             invoicerow.invoice = invoice
-#             invoicerow.save()
-#             return redirect('edit_invoice_get', id=id)
-#     else:
-#         form = InvoiceRowForm()
-
-#     return render(request, 'invoiceedit.html', {'form': form, 'invoice': invoice})
-
-# def edit_invoice_get(request, id):
-#     invoicerow = InvoiceRows.objects.all
-#     invoice = Invoice.objects.get(id=id)
-#     context = {'invoicerow': invoicerow,'invoices': invoice}
-#     return render (request,"invoiceedit.html", context)
-    
-    
-
-# def edit_invoice_post(request, id):
-#         invoicerow = Invoice.objects.get(id=id)
-#         invoicerow = InvoiceRows.objects.all
-#         invoicerow.title = request.POST['title']
-#         invoicerow.price = request.POST['price']
-#         invoicerow.quantity = request.POST['quantity']
-#         invoicerow.save()
-#         return redirect(invoicerowlistview)
+InvoiceRowFormSet = modelformset_factory(InvoiceRows, form=InvoiceRowForm, extra=1)
 def edit_invoice_get(request, id):
-    invoice = get_object_or_404(Invoice, id=id)
-    invoicerows = InvoiceRows.objects.filter(invoice=invoice)
-    formset = InvoiceRowFormSet(queryset=invoicerows)
+    invoices = get_object_or_404(Invoice, id=id)
+    invoicerow = InvoiceRows.objects.filter(invoice=invoices)
+    formset = InvoiceRowFormSet(queryset=invoicerow)
 
-    context = {'invoice': invoice, 'formset': formset}
+    context = {'invoice': invoices, 'formset': formset}
     return render(request, "invoiceedit.html", context)
+
 
 def edit_invoice_post(request, id):
     invoice = get_object_or_404(Invoice, id=id)
@@ -210,29 +145,37 @@ def edit_invoice_post(request, id):
     formset = InvoiceRowFormSet(request.POST, queryset=invoicerows)
 
     if formset.is_valid():
-        formset.save()
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.invoice = invoice
+            instance.save()
 
-    return redirect(reverse('invoicerowlist'))
+        formset.save_m2m()
+
+        return redirect('invoicelist') 
+    else:
+        print("Formset is not valid")
+        print(formset.errors)
+
+    context = {'invoice': invoice, 'formset': formset}
+    return render(request, "invoiceedit.html", context)
 
 
 
-# def edit_invoice_get(request, id):
-#     invoicerows = InvoiceRows.objects.filter(invoice__id=id)
-#     invoice = get_object_or_404(Invoice, id=id)
-#     context = {'invoicerows': invoicerows, 'invoice': invoice}
-#     return render(request, "invoiceedit.html", context)
+
 
 # def edit_invoice_post(request, id):
-#     invoice = get_object_or_404(Invoice, id=id)
-#     invoicerows = InvoiceRows.objects.filter(invoice=invoice)
+#     print(f"Processing edit_invoice_post for id: {id}")
+#     invoices = get_object_or_404(Invoice, id=id)
+#     invoicerow = InvoiceRows.objects.filter(invoice=invoices)
+#     formset = InvoiceRowFormSet(request.POST, queryset=invoicerow)
 
-#     for invoicerow in invoicerows:
-#         invoicerow.title = request.POST.get(f'title_{invoicerow.id}')
-#         invoicerow.price = request.POST.get(f'price_{invoicerow.id}')
-#         invoicerow.quantity = request.POST.get(f'quantity_{invoicerow.id}')
-#         invoicerow.save()
+#     if formset.is_valid():
+#         formset.save()
+#     print("Redirecting to invoicelist")
+#     return redirect(invoicelistview)
 
-#     return redirect('invoicerowlistview')
+
 
 #add
 def addInvoice(request):
@@ -241,20 +184,20 @@ def addInvoice(request):
         formset = InvoiceRowFormSet(request.POST, queryset=InvoiceRows.objects.none(), prefix='invoicerow') #formset is a layer of abstraction to work with multiple forms on the same page. 
 
         if form.is_valid() and formset.is_valid():
-            invoice = form.save()
-            invoice_rows = formset.save(commit=False)
+            invoices = form.save()
+            invoicerow = formset.save(commit=False)
 
             total = 0
-            for row in invoice_rows:
-                row.invoice = invoice
+            for row in invoicerow:
+                row.invoice = invoices
                 row.save()
             
             # Calculate total for each row
                 row_total = row.quantity * row.price
                 total += row_total
 
-            invoice.total = total
-            invoice.save()
+            invoices.total = total
+            invoices.save()
 
             return redirect('invoicelist')  # Redirect to a page displaying a list of invoices
     else:

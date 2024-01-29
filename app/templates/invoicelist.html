@@ -26,8 +26,8 @@
     <div class="card-body">
         <h4 class="card-title">Invoice ID: {{i.id}}</h4>
         <h4 class="card-title">Customer: {{i.customerAccount.name}}</h4>
-        <p class="card-text">Invoice date: {{i.invoiceDate}} </p>
-        <p class="card-text">Due date: {{i.dueDate}} </p>
+        <p class="card-text">Invoice date: {{i.invoiceDate|date:"Y-d-m"}} </p>
+        <p class="card-text">Due date: {{i.dueDate|date:"Y-d-m"}} </p>
         <p class="card-text">Created by: {{i.account.name}} </p>
         
        
@@ -38,7 +38,7 @@
 
         <a href="/edit-invoice-get/{{i.id}}/"class="btn" >Edit</a>
         
-        <a class="btn" href="/invoice/{{i.id}}/preview/">Bills</a>
+        <a class="btn" href="/invoice/{{i.id}}/preview/">View Bill</a>
       
         
     </div>

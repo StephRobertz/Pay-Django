@@ -62,7 +62,7 @@
     <div class="invoice">
         <div class="header">
             <h1>Invoice</h1>
-            <p>Invoice Date: {{ invoice.date }}</p>
+            <p>Invoice Date: {{ invoice.date|date:"Y-m-d" }}</p>
             <p>Customer: {{ invoice.customer }}</p>
         </div>
         <div class="invoice-details">
@@ -70,7 +70,7 @@
             <p>Invoice ID: {{ ir.invoice.id }}</p>
             <p>Account: {{ ir.invoice.account.name }}</p>
             <p>Banknumber: {{ ir.invoice.account.bankAccountNr }}</p>
-            <p>Due Date: {{ ir.invoice.dueDate }}</p>
+            <p>Due Date: {{ ir.invoice.dueDate|date:"Y-m-d" }}</p>
             <!-- Add more details as needed -->
         </div>
         <div class="invoice-items">
