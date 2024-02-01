@@ -56,10 +56,12 @@ class InvoiceRows(models.Model):
     
     def calc_total(self):
         # Convert the price and quantity to numeric types before multiplication
-        price_numeric = float(self.price)
-        quantity_numeric = float(self.quantity) if self.quantity is not None else 0
+        price = float(self.price)
+        quantity = float(self.quantity) if self.quantity is not None else 0
 
-        amount = Decimal(price_numeric) * Decimal(quantity_numeric)
+
+
+        amount = Decimal(price) * Decimal(quantity)
 
         
         return amount
@@ -68,20 +70,3 @@ class InvoiceRows(models.Model):
         self.total = self.calc_total()
         super(InvoiceRows, self).save(*args, **kwargs)
 
-
-# def calc_total(self):
-#         # Convert the price and quantity to Decimal directly
-#         price_decimal = Decimal(self.price)
-#         quantity_decimal = Decimal(self.quantity) if self.quantity is not None else Decimal('0')
-
-#         # Check if there is a VAT associated with the row
-#         vat_percent = self.vat.percent if self.vat else 0.0
-
-#         # Calculate the amount including VAT
-#         amount = price_decimal * quantity_decimal * (1 + vat_percent / 100)
-
-#         return amount
-
-# def save(self, *args, **kwargs):
-#         self.total = self.calc_total()
-#         super(InvoiceRows, self).save(*args, **kwargs)

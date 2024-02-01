@@ -82,6 +82,8 @@
                         <th>Quantity</th>
                         <th>Unit Price</th>
                         <th>Total</th>
+                        <th>Added Tax</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -91,6 +93,8 @@
                             <td>{{ item.quantity }}</td>
                             <td>{{ item.unit_price }}</td>
                             <td>{{ item.total }}</td>
+                            <td>{{ ir.vat.percent }}%</td>
+                     
                         </tr>
                     {% endfor %}
                 </tbody>
