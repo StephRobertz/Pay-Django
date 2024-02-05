@@ -83,7 +83,7 @@
                         <th>Unit Price</th>
                         <th>Total</th>
                         <th>Added Tax</th>
-                        
+                        <th>Total incl. Tax</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -101,9 +101,9 @@
             </table>
         </div>
         <div class="total">
-            <h2>Total: ${{ invoice.total }}</h2>
-            
-            <h2>Total incl. Tax: ${{ invoice.total_with_tax }}</h2>
+            <h4>Total: ${{ ir.total }}</h4>
+            <h4>Tax Amount: ${{ ir.vat_amount }}</h4>
+            <h4>Total incl. Tax: ${{ ir.total_with_tax }}</h4>
         </div>
     </div>
     {% endfor %}

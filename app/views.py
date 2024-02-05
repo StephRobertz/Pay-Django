@@ -239,9 +239,9 @@ def preview_invoice(request, id):
         invoice_rows = InvoiceRows.objects.filter(invoice=invoice_instance)
 
         # Laske summa käyttäen kokoamista (aggregation). Tässä aggregaatiotoimintoa käytetään laskemaan summa laskun liittyvistä tiedoista
-        total = invoice_rows.aggregate(Sum('total'))['total__sum']
+        #total = invoice_rows.aggregate(Sum('total'))['total__sum']
         #vat = invoice_rows.aggregate(Sum('vat'))['vat__amount']
-        total_with_tax = invoice_rows.aggregate(Sum('total_with_tax'))['total_with_tax__sum'] #or Decimal('0.00')
+       # total_with_tax = invoice_rows.aggregate(Sum('total_with_tax'))['total_with_tax__sum'] #or Decimal('0.00')
 
         # Laskun tiedot
         invoice_data = {
@@ -252,9 +252,10 @@ def preview_invoice(request, id):
                 {'description': ir.title, 'quantity': ir.quantity, 'unit_price': ir.price, 'total': ir.total, 'total_with_tax': ir.total_with_tax}
                 for ir in invoice_rows
             ],
-             'total': total,
+             #'total': invoice_rows.total,
              #'vat': vat,
-             'total_with_tax': total_with_tax,
+             #'total_with_tax': invoice_rows.total_with_tax,
+             
         }
 
         # Hakee muita liittyviä tietoja esikatselua varten.
@@ -264,6 +265,7 @@ def preview_invoice(request, id):
             'invoice': invoice_data,
             'invoicerow': invoice_rows,
             'invoices': invoicelist,
+          
         }
 
         return render(request, 'invoice_preview.html', context)
@@ -286,7 +288,7 @@ class GeneratePdf(View):
         
 
         # Laske summa käyttäen kokoamista (aggregation). Tässä aggregaatiotoimintoa käytetään laskemaan summa laskun liittyvistä tiedoista
-        total = invoice_rows.aggregate(Sum('total'))['total__sum']
+       # total = invoice_rows.aggregate(Sum('total'))['total__sum']
         
 
         # Laskun tiedot
@@ -298,7 +300,8 @@ class GeneratePdf(View):
                 {'description': ir.title, 'quantity': ir.quantity, 'unit_price': ir.price, 'total': ir.total}
                 for ir in invoice_rows
             ],
-            'total': total,
+            #'total': total,
+            #'total': invoice_rows.total,
         }
 
         context = {'invoice': invoice_data, 'invoicerow': invoice_rows}

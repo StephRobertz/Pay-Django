@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime, timedelta
 from decimal import Decimal
 
+
 class Account(models.Model):
     name = models.CharField(max_length =20, default=None)
     address = models.CharField(max_length =50, default=None)
@@ -49,6 +50,7 @@ class InvoiceRows(models.Model):
     total_with_tax = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), null=True)
     invoice = models.ForeignKey(Invoice, on_delete =models.CASCADE)
     vat = models.ForeignKey(Vat, on_delete =models.PROTECT, blank=True, null=True)
+    vat_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), null=True)
 
     def __str__(self):
         return self.title
@@ -57,8 +59,10 @@ class InvoiceRows(models.Model):
     
     def calc_total(self):
         # Convert the price and quantity to numeric types before multiplication
-        price = float(self.price)
-        quantity = float(self.quantity) if self.quantity is not None else 0
+        # price = float(self.price)
+        # quantity = float(self.quantity) if self.quantity is not None else 0
+        price = Decimal(str(self.price))
+        quantity = Decimal(str(self.quantity)) if self.quantity is not None else Decimal('0')
 
         amount = Decimal(price) * Decimal(quantity)
         return amount
@@ -66,7 +70,7 @@ class InvoiceRows(models.Model):
 
     def save(self, *args, **kwargs):
         self.total = self.calc_total()
-        self.vat_amount = self.total * (self.vat.percent / 100 if self.vat else Decimal('0.00'))
+        self.vat_amount = self.total * (self.vat.percent / Decimal('100')) #if self.vat else Decimal('0.00'))
 
         print(f"Debug: total={self.total}, vat_amount={self.vat_amount}")
         self.total_with_tax = self.total + self.vat_amount

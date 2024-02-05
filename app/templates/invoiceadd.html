@@ -21,10 +21,12 @@
     {{ form.as_p }}
 
     <div id="formset-container">
-        {{ formset.management_form }}
+        <!-- {{ formset.management_form }}
         {% for form in formset %}
             {{ form.as_table }}
-        {% endfor %}
+        {% endfor %} -->
+        {{ formset.management_form }}
+        {{ formset.as_table }}
     </div>
 
     <button type="submit">Create Invoice</button>
