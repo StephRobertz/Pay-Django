@@ -150,7 +150,7 @@ def addInvoice(request):
 
     if request.method == 'POST':
         form = InvoiceForm(request.POST)
-        formset = AddInvoiceRowFormSet(request.POST, queryset=InvoiceRows.objects.none(), prefix='invoicerow') #prefix parameter is used to set a unique identifier for a form or formset (to avoid naming conflicts)
+        formset = AddInvoiceRowFormSet(request.POST, queryset=InvoiceRows.objects.none(), prefix='invoicerow')
 
         if form.is_valid() and formset.is_valid():
             invoices = form.save()
@@ -158,14 +158,12 @@ def addInvoice(request):
 
             total = 0
             for row in invoicerow:
-            #Liitä jokainen rivi laskuun.
+                # Liitä jokainen rivi laskuun.
                 row.invoice = invoices
                 row.save()
 
-            #Laske summa kullekin riville.
-                vat_percent = row.vat.percent if row.vat else Decimal('14.00')
-                row_total = row.quantity * row.price * (1 + vat_percent)
-                total += row_total
+                # Laske summa kullekin riville.
+                total += row.quantity * row.price
 
             invoices.total = total
             invoices.save()
@@ -176,10 +174,14 @@ def addInvoice(request):
         formset = AddInvoiceRowFormSet(queryset=InvoiceRows.objects.none(), prefix='invoicerow')
 
     return render(request, 'invoiceadd.html', {'form': form, 'formset': formset})
+
 # def addInvoice(request):
+#     # Luo formsetin uusien rivien lisäämistä varten.
+#     AddInvoiceRowFormSet = modelformset_factory(InvoiceRows, form=InvoiceRowForm, extra=1)
+
 #     if request.method == 'POST':
 #         form = InvoiceForm(request.POST)
-#         formset = InvoiceRowFormSet(request.POST, queryset=InvoiceRows.objects.none(), prefix='invoicerow') #formset is a layer of abstraction to work with multiple forms on the same page. 
+#         formset = AddInvoiceRowFormSet(request.POST, queryset=InvoiceRows.objects.none(), prefix='invoicerow') #prefix parameter is used to set a unique identifier for a form or formset (to avoid naming conflicts)
 
 #         if form.is_valid() and formset.is_valid():
 #             invoices = form.save()
@@ -187,23 +189,26 @@ def addInvoice(request):
 
 #             total = 0
 #             for row in invoicerow:
+#             #Liitä jokainen rivi laskuun.
 #                 row.invoice = invoices
 #                 row.save()
-            
-#             # Calculate total for each row
-#                 row_total = row.quantity * row.price
+
+#             #Laske summa kullekin riville.
+#                 print(f"Debug: quantity={row.quantity}, price={row.price}")
+#                 row_total = row.quantity * row.price 
+#                 print(f"Debug: row_total={row_total}")
+
 #                 total += row_total
 
 #             invoices.total = total
 #             invoices.save()
 
-#             return redirect('invoicelist')  # Redirect to a page displaying a list of invoices
+#             return redirect('invoicelist')
 #     else:
 #         form = InvoiceForm()
-#         formset = InvoiceRowFormSet(queryset=InvoiceRows.objects.none(), prefix='invoicerow')
+#         formset = AddInvoiceRowFormSet(queryset=InvoiceRows.objects.none(), prefix='invoicerow')
 
 #     return render(request, 'invoiceadd.html', {'form': form, 'formset': formset})
-
 
 
 
@@ -235,6 +240,8 @@ def preview_invoice(request, id):
 
         # Laske summa käyttäen kokoamista (aggregation). Tässä aggregaatiotoimintoa käytetään laskemaan summa laskun liittyvistä tiedoista
         total = invoice_rows.aggregate(Sum('total'))['total__sum']
+        #vat = invoice_rows.aggregate(Sum('vat'))['vat__amount']
+        total_with_tax = invoice_rows.aggregate(Sum('total_with_tax'))['total_with_tax__sum'] #or Decimal('0.00')
 
         # Laskun tiedot
         invoice_data = {
@@ -242,10 +249,12 @@ def preview_invoice(request, id):
             'date': invoice_instance.invoiceDate,
             'customer': invoice_instance.customerAccount.name,
             'items': [
-                {'description': ir.title, 'quantity': ir.quantity, 'unit_price': ir.price, 'total': ir.total}
+                {'description': ir.title, 'quantity': ir.quantity, 'unit_price': ir.price, 'total': ir.total, 'total_with_tax': ir.total_with_tax}
                 for ir in invoice_rows
             ],
              'total': total,
+             #'vat': vat,
+             'total_with_tax': total_with_tax,
         }
 
         # Hakee muita liittyviä tietoja esikatselua varten.

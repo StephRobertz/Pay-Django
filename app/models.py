@@ -46,6 +46,7 @@ class InvoiceRows(models.Model):
     price = models.DecimalField(max_digits = 10, decimal_places=2, default=Decimal('0.00'), blank=True, null=True)
     quantity = models.IntegerField(default = 0, null=True)
     total = models.DecimalField(max_digits = 10, decimal_places=2, default=Decimal('0.00'), null=True)
+    total_with_tax = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), null=True)
     invoice = models.ForeignKey(Invoice, on_delete =models.CASCADE)
     vat = models.ForeignKey(Vat, on_delete =models.PROTECT, blank=True, null=True)
 
@@ -59,14 +60,17 @@ class InvoiceRows(models.Model):
         price = float(self.price)
         quantity = float(self.quantity) if self.quantity is not None else 0
 
-
-
         amount = Decimal(price) * Decimal(quantity)
-
-        
         return amount
+
 
     def save(self, *args, **kwargs):
         self.total = self.calc_total()
+        self.vat_amount = self.total * (self.vat.percent / 100 if self.vat else Decimal('0.00'))
+
+        print(f"Debug: total={self.total}, vat_amount={self.vat_amount}")
+        self.total_with_tax = self.total + self.vat_amount
+        print(f"Debug: total={self.total}, vat_amount={self.vat_amount}, total_with_tax={self.total_with_tax}")  # Add this line for debugging
         super(InvoiceRows, self).save(*args, **kwargs)
 
+   
