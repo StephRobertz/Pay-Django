@@ -19,35 +19,6 @@
             <input type="submit" value="Save">
         </form>
 
-        <!-- <form method="post" action="{% url 'edit_invoice_post' invoice.id %}">
-            {% csrf_token %}
-            {{ formset.errors }}
-            {{ formset.management_form }}
-        
-            <table>
-                {% for form in formset %}
-                    {% if form.instance.id %}
-                        {{ form.as_table }}
-                    {% endif %}
-                {% endfor %}
-            </table>
-        
-            <input type="submit" value="Save">
-        </form> -->
-
-
-
-
-        <!-- <form method="post" action="{% url 'edit_invoice_post' invoice.id %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-        
-            <div id="formset-container">
-                {{ formset.management_form }}
-                {{ formset.forms.0.as_table }}
-            </div>
-            <input type="submit" value="Save">
-          </form> -->
     </div>
 </div>
 

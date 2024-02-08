@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import landingview, customerlistview, addCustomer, invoicelistview, addInvoice, accountlistview
 from .views import deletecustomer, confirmdeletecustomer, edit_customer_get, edit_customer_post,  invoicerowlistview ,edit_invoice_get, edit_invoice_post
-from .views import deleteinvoice, confirmdeleteinvoice,  preview_invoice
+from .views import deleteinvoice, confirmdeleteinvoice,  preview_invoice, SendInvoice
 from .views import invoices_filtered, GeneratePdf
 
 urlpatterns = [
@@ -30,4 +30,5 @@ urlpatterns = [
     path('invoice/<int:id>/preview/', preview_invoice, name='preview_invoice'),
     # path('generate_invoice_pdf/<int:id>/', generate_invoice_pdf, name='generate_invoice_pdf'),
     path('pdf/<int:id>/', GeneratePdf.as_view(), name='generate_pdf'),
+    path('send_invoice/<int:id>/', SendInvoice.as_view(), name='send_invoice'),
 ]

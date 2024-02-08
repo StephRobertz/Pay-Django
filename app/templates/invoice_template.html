@@ -10,11 +10,16 @@
 
     <title>Invoice</title>
     <style type="text/css">
-        body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html,body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            
         }
         .invoice {
             width: 80%;
@@ -27,10 +32,13 @@
             text-align: center;
         }
         .invoice-details {
-            margin-top: 20px;
+            padding: 20px;
+            margin: 0; 
+           
         }
+       
         .invoice-items {
-            margin-top: 20px;
+            margin-top: 0px;
         }
         table {
             width: 100%;
@@ -49,6 +57,7 @@
             margin-top: 20px;
             text-align: right;
         }
+       
     </style>
 </head>
 
@@ -60,14 +69,15 @@
             <p>Invoice Date: {{ invoice.date|date:"Y-m-d" }}</p>
             <p>Customer: {{ invoice.customer }}</p>
         </div>
+        
         <div class="invoice-details">
             <h2>Invoice Details</h2>
             <p>Invoice ID: {{ ir.invoice.id }}</p>
             <p>Account: {{ ir.invoice.account.name }}</p>
             <p>Banknumber: {{ ir.invoice.account.bankAccountNr }}</p>
             <p>Due Date: {{ ir.invoice.dueDate|date:"Y-m-d" }}</p>
-            <!-- Add more details as needed -->
         </div>
+       
         <div class="invoice-items">
             <h2>Invoice Items</h2>
             <table>
@@ -77,6 +87,8 @@
                         <th>Quantity</th>
                         <th>Unit Price</th>
                         <th>Total</th>
+                        <th>Added Tax</th>
+                        <th>Total incl. Tax</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,15 +98,18 @@
                             <td>{{ item.quantity }}</td>
                             <td>{{ item.unit_price }}</td>
                             <td>{{ item.total }}</td>
+                            <td>{{ ir.vat.percent }}%</td>
+                            <td>{{ ir.total_with_tax }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         <div class="total">
-            <h3>Total: ${{ ir.total }}</h3>
-            <h3>Tax Amount: ${{ ir.vat_amount }}</h3>
-            <h3>Total incl. Tax: ${{ ir.total_with_tax }}</h3>
+            <h5>Total: €{{ ir.total }}</h5>
+            <h5>Tax Amount: €{{ ir.vat_amount }}</h5><hr> <!-- Horizontal line -->
+            <br>
+            <h4>Total incl. Tax: ${{ ir.total_with_tax }}</h4>
         </div>
     </div>
     {% endfor %}

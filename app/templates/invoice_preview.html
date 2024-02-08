@@ -101,8 +101,9 @@
             </table>
         </div>
         <div class="total">
-            <h4>Total: ${{ ir.total }}</h4>
-            <h4>Tax Amount: ${{ ir.vat_amount }}</h4>
+            <h5>Total: ${{ ir.total }}</h5>
+            <h5>Tax Amount: ${{ ir.vat_amount }}</h5><hr>
+            <br>
             <h4>Total incl. Tax: ${{ ir.total_with_tax }}</h4>
         </div>
     </div>
@@ -112,8 +113,9 @@
     
 {% if invoicerow %}
     {% for ir in invoicerow %}
-        <!-- Your existing template content here -->
-        <a href="{% url 'generate_pdf' id=ir.invoice.id %}" class="btn">pdf</a>
+        
+        <a href="{% url 'generate_pdf' id=ir.invoice.id %}" class="btn">PDF</a>
+        <a href="{% url 'send_invoice' id=invoice.invoice_id %}" class="btn btn-primary">Send Invoice</a>
     {% endfor %}
 {% else %}
     <p>No invoicerow data available</p>

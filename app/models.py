@@ -59,8 +59,7 @@ class InvoiceRows(models.Model):
     
     def calc_total(self):
         # Convert the price and quantity to numeric types before multiplication
-        # price = float(self.price)
-        # quantity = float(self.quantity) if self.quantity is not None else 0
+        
         price = Decimal(str(self.price))
         quantity = Decimal(str(self.quantity)) if self.quantity is not None else Decimal('0')
 
