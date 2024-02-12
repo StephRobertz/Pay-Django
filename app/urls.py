@@ -28,7 +28,6 @@ urlpatterns = [
     path('delete-invoice/<int:id>/', deleteinvoice),
     path('confirm-delete-invoice/<int:id>/', confirmdeleteinvoice, name='confirm_delete_invoice'),
     path('invoice/<int:id>/preview/', preview_invoice, name='preview_invoice'),
-    # path('generate_invoice_pdf/<int:id>/', generate_invoice_pdf, name='generate_invoice_pdf'),
     path('pdf/<int:id>/', GeneratePdf.as_view(), name='generate_pdf'),
     path('send_invoice/<int:id>/', SendInvoice.as_view(), name='send_invoice'),
 ]

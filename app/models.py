@@ -58,7 +58,6 @@ class InvoiceRows(models.Model):
    
     
     def calc_total(self):
-        # Convert the price and quantity to numeric types before multiplication
         
         price = Decimal(str(self.price))
         quantity = Decimal(str(self.quantity)) if self.quantity is not None else Decimal('0')
@@ -69,11 +68,12 @@ class InvoiceRows(models.Model):
 
     def save(self, *args, **kwargs):
         self.total = self.calc_total()
-        self.vat_amount = self.total * (self.vat.percent / Decimal('100')) #if self.vat else Decimal('0.00'))
+        self.vat_amount = self.total * (self.vat.percent / Decimal('100'))
 
-        print(f"Debug: total={self.total}, vat_amount={self.vat_amount}")
+        # Line for debugging
+        #print(f"Debug: total={self.total}, vat_amount={self.vat_amount}")
         self.total_with_tax = self.total + self.vat_amount
-        print(f"Debug: total={self.total}, vat_amount={self.vat_amount}, total_with_tax={self.total_with_tax}")  # Add this line for debugging
+        #print(f"Debug: total={self.total}, vat_amount={self.vat_amount}, total_with_tax={self.total_with_tax}")
         super(InvoiceRows, self).save(*args, **kwargs)
 
    

@@ -35,7 +35,7 @@ def addCustomer(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
         if form.is_valid():
-            # Tallentaa lomakkeen, mukaan lukien valittu tili (Account)
+            # Tallentaa lomakkeen, + valittu tili (Account)
             customer = form.save(commit=False)
 
             selected_account = request.POST.get('account')
@@ -242,15 +242,11 @@ def preview_invoice(request, id):
         return HttpResponse("An error occurred while processing the request.", status=500)
 
 
-
-    
-
-        
 #PDF generator
 #Luodaan luokkapohjainen näkymä
 class GeneratePdf(View):
     def get(self, request, id):
-        # Get the invoice data from the database
+        
         invoice_instance = get_object_or_404(Invoice, id=id)
         invoice_rows = InvoiceRows.objects.filter(invoice=invoice_instance)
 
@@ -264,8 +260,6 @@ class GeneratePdf(View):
                 {'description': ir.title, 'quantity': ir.quantity, 'unit_price': ir.price, 'total': ir.total}
                 for ir in invoice_rows
             ],
-            #'total': total,
-            #'total': invoice_rows.total,
         }
 
         context = {'invoice': invoice_data, 'invoicerow': invoice_rows}
@@ -284,11 +278,6 @@ class SendInvoice(View):
             
             # Retrieve customer email
             to_email = invoice_instance.customerAccount.mail
-
-            # Retrieve related invoice rows
-            invoice_rows = InvoiceRows.objects.filter(invoice=invoice_instance)
-
-          
 
             # Define subject, message, and from_email before using them
             subject = 'Invoice'

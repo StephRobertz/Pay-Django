@@ -1,12 +1,12 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div class="card" style="width: 25rem;">
-    
+<div class="card" style="width: 60rem;">
+    <center>
     <div class="card-header">
         <h5>Editing Invoice, ID: {{ invoice.id }} by {{ invoice.customerAccount.name }} </h5>
     </div>
-
+    </center>
     <div class="card-body">
         <form method="post" action="{% url 'edit_invoice_post' invoice.id %}">
             {% csrf_token %} 
@@ -16,7 +16,9 @@
                 <!-- {{ form.errors }} -->
             {{ form.as_table }}
             {% endfor %}
-            <input type="submit" value="Save">
+            <center>
+            <input type="submit" class="btn" value="Save">
+            </center>
         </form>
 
     </div>

@@ -2,37 +2,30 @@
 
 
 {% block content %}
-<section id="home">
+<section id="home" style="height: 20rem;">
     <div class="home-text">
     <h6>Project Billingsystem</h6>
     <h1>Add New Bill</h1>
     <p>Fill in the Form.</p>
 
 
-    <div class="form-div">
-       
-    </div>
-    </div>
-    
 </section>
-
+<br>
+<div class="card" style="width: 60rem;">
 <form method="post" action="{% url 'add-invoice' %}">
     {% csrf_token %}
     {{ form.as_p }}
 
     <div id="formset-container">
-        <!-- {{ formset.management_form }}
-        {% for form in formset %}
-            {{ form.as_table }}
-        {% endfor %} -->
+     
         {{ formset.management_form }}
         {{ formset.as_table }}
     </div>
-
-    <button type="submit">Create Invoice</button>
-   
+    <center>
+    <button type="submit" class="btn">Create Invoice</button>
+    </center>
 </form> 
-
+</div>
 
 
 

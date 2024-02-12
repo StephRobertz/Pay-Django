@@ -3,21 +3,19 @@
 
 
 {% block content %}
-<section id="home">
+<section id="home" style="height: 20rem;">
     <div class="home-text">
     <h6>Project Billingsystem</h6>
     <h1>Add New Customer</h1>
     <p>Fill in the Form.</p>
-
-
-    <div class="form-div">
-        <form  method="post" action="{% url 'add-customer' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" class="btn" >
-        </form>
-    </div>
-    </div>
-
-</section>
+</section><br>
+<center>
+<div class="card" style="width: 65rem;">
+    <form  method="post" action="{% url 'add-customer' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn" >
+    </form>
+</div>
+</center>
 {% endblock %}

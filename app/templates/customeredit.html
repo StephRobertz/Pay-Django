@@ -2,17 +2,17 @@
 
 {% block content %}
 
-<div class="card" style="width: 25rem;">
+<div class="card" style="width: 65rem;">
     <div class="card-header">
-
+    <center>
         <h5>Editing {{customer.name}} by {{customer.account.name}}</h5>
-
+    </center>
         <div class="card-body">
             <form method="post" action="/edit-customer-post/{{customer.id}}/">
 
                 {%csrf_token %}
                 <div class="form-group">
-                    <label>name</label>
+                    <label >name</label>
                     <input type="text" name="name" value="{{ customer.name }}">
                 </div>
                 <div class="form-group">
@@ -31,10 +31,11 @@
                     <label>vat</label>
                     <input type="text" name="vat" value="{{ customer.vat }}">
                 </div>
-                
+                <center>
                 <input type="submit" value="Update" class="btn btn-success btn-sm">
                 <input type="button" onclick="window.location.href='/customerlist'" id="hide-btn"
                     class="btn btn-secondary btn-sm" value="Cancel">
+                </center>
             </form>
         </div>
     </div>

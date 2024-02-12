@@ -1,6 +1,6 @@
 from django import forms
 from .models import CustomerAccount, Invoice, InvoiceRows, Vat
-#from django.forms import modelformset_factory
+
 
 
 
@@ -33,7 +33,7 @@ class InvoiceRowForm(forms.ModelForm):
             'quantity': 'Quantity',
             'vat': 'Vat',
         }
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args, **kwargs):        #when creating a subclass that extends the functionality of a parent class.
              super().__init__(*args, **kwargs)
            
 

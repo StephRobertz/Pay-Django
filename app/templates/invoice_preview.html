@@ -71,7 +71,7 @@
             <p>Account: {{ ir.invoice.account.name }}</p>
             <p>Banknumber: {{ ir.invoice.account.bankAccountNr }}</p>
             <p>Due Date: {{ ir.invoice.dueDate|date:"Y-m-d" }}</p>
-            <!-- Add more details as needed -->
+          
         </div>
         <div class="invoice-items">
             <h2>Invoice Items</h2>
@@ -101,10 +101,10 @@
             </table>
         </div>
         <div class="total">
-            <h5>Total: ${{ ir.total }}</h5>
-            <h5>Tax Amount: ${{ ir.vat_amount }}</h5><hr>
+            <h5>Total: €{{ ir.total }}</h5>
+            <h5>Tax Amount: €{{ ir.vat_amount }}</h5><hr>
             <br>
-            <h4>Total incl. Tax: ${{ ir.total_with_tax }}</h4>
+            <h4>Total incl. Tax: €{{ ir.total_with_tax }}</h4>
         </div>
     </div>
     {% endfor %}
@@ -113,9 +113,10 @@
     
 {% if invoicerow %}
     {% for ir in invoicerow %}
-        
+        <center>
         <a href="{% url 'generate_pdf' id=ir.invoice.id %}" class="btn">PDF</a>
         <a href="{% url 'send_invoice' id=invoice.invoice_id %}" class="btn btn-primary">Send Invoice</a>
+        </center>
     {% endfor %}
 {% else %}
     <p>No invoicerow data available</p>
