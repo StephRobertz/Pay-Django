@@ -48,7 +48,7 @@ class InvoiceRows(models.Model):
     quantity = models.IntegerField(default = 0, null=True)
     total = models.DecimalField(max_digits = 10, decimal_places=2, default=Decimal('0.00'), null=True)
     total_with_tax = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), null=True)
-    invoice = models.ForeignKey(Invoice, on_delete =models.CASCADE)
+    invoice = models.ForeignKey(Invoice, on_delete =models.PROTECT)
     vat = models.ForeignKey(Vat, on_delete =models.PROTECT, blank=True, null=True)
     vat_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), null=True)
 

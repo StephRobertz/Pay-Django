@@ -1,17 +1,14 @@
 from django.shortcuts import render, redirect
 from .models import CustomerAccount, Invoice, InvoiceRows, Account
 from .forms import CustomerForm, InvoiceForm, InvoiceRowFormSet, InvoiceRowForm
-from decimal import Decimal
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
-from django.db.models import Sum
 from django.views.generic import View
 from django.views import View
 from .process import html_to_pdf
 from django.forms import modelformset_factory
 from django.http import HttpResponse
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
 
 
 def landingview(request):
@@ -69,8 +66,34 @@ def confirmdeletecustomer(request, id):
 
 
 def deletecustomer(request, id):
-    CustomerAccount.objects.get(id = id).delete()
-    return redirect(customerlistview)
+    try:
+        customer = CustomerAccount.objects.get(id = id)
+        context = {'customer': customer}
+        # Tarkistaa onko asiakkaalla olemassa olevia laskuja
+        if Invoice.objects.filter(customerAccount=customer).exists():
+            return render(request, "custdelerror.html",context)
+       
+        customer.delete()
+        return redirect(customerlistview)
+    
+    
+    except Exception as e:
+        # Vianmääritystä varten
+        import traceback
+        traceback.print_exc()
+        return render(request, "custdelerror.html", {'error_message': "An error occurred while processing the request."})
+    
+# def deletecustomer(request, id):
+#     try:
+#         CustomerAccount.objects.get(id = id).delete()
+#         return redirect(customerlistview)
+#     except Exception as e:
+#          # Vianmääritystä varten
+#         import traceback
+#         traceback.print_exc()
+        
+#     return HttpResponse("An error occurred while processing the request. Cannot delete customer because of existing invoices.", status=500)
+
 
 def edit_customer_get(request, id):
     customer = get_object_or_404(CustomerAccount, id=id)
@@ -296,8 +319,6 @@ class SendInvoice(View):
                 fail_silently=True,
                 
             )
-
-            # Additional logic (e.g., return a response) can be added based on your requirements
 
             return HttpResponse("Email content printed. Review the console.")
         

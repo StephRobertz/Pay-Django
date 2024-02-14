@@ -2,16 +2,18 @@
 
 {% block content %}
 <center>
-
 <br>
+<h3>Your deletion not succeed.</h3>
+
 <div class="card" style="width: 50rem;">
     <div class="card-body">
         <br>
-        <h5 class="card-text">Confirm removal of <b>customer,</b> {{customer.name}}</h5>
+        <h5 class="card-text">Cannot delete <b>customer</b> {{customer.name}}, because of existing invoices.</h5>
+        <br>
         <br>
         <a href="/customerlist/" class="btn btn-primary">Back</a>
 
-        <a href="/delete-customer/{{customer.id}}/" class="btn btn-danger">Delete</a>
+        
 
     </div>
 </div>
